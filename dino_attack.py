@@ -1,5 +1,5 @@
 """
-Jinx and Gravity Game
+Dino Battle Game
 
 This is the main game script
 """
@@ -17,7 +17,7 @@ from arcade import Point
 
 file_path = os.path.dirname(os.path.abspath(__file__))
 
-SCREEN_TITLE = "Jinx & Gravity"
+SCREEN_TITLE = "Dino Battle"
 DEFAULT_LINE_HEIGHT = 45
 DEFAULT_FONT_SIZE = 20
 
@@ -125,7 +125,7 @@ class PlayerSprite(arcade.Sprite):
         self.scale = SPRITE_SCALING_PLAYER
 
         # Images from Character pack
-        main_path = file_path + "\\src\\resources\\images\\animated_characters\\jinx\\jinx"
+        main_path = file_path + "\\src\\resources\\images\\animated_characters\\spiny\\spiny"
 
         # Load textures for idle standing
         self.idle_texture_pair = arcade.load_texture_pair(f"{main_path}_idle.png",
@@ -582,9 +582,9 @@ class MenuView(arcade.View):
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text("Welcome to Jinx's Adventure", self.window.width / 2, self.window.height / 2,
+        arcade.draw_text("Welcome to Dino Battle", self.window.width / 2, self.window.height / 2,
                          arcade.color.BLACK, font_size=50, anchor_x="center")
-        arcade.draw_text("A crazy physics platformer", self.window.width / 2, self.window.height / 2 - 75,
+        arcade.draw_text("A crazy dino battling game", self.window.width / 2, self.window.height / 2 - 75,
                          arcade.color.RED_BROWN, font_size=25, anchor_x="center")
         arcade.draw_text("Click to see the instructions", self.window.width / 2, self.window.height / 2 - 150,
                          arcade.color.REDWOOD, font_size=20, anchor_x="center")
@@ -751,12 +751,21 @@ class GameView(arcade.View):
         # Lives
         self.lives = 3
 
-        # Load sounds
+        # Load Sounds
         self.game_over = arcade.load_sound(file_path+"/src/resources/sounds/gameover2.wav")
         self.collect_coin_sound = arcade.load_sound(file_path+"/src/resources/sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(file_path+"/src/resources/sounds/jump3.wav")
         self.hit_sound = arcade.load_sound(file_path+"/src/resources/sounds/hit2.wav")
         self.shoot_sound = arcade.load_sound(file_path+"/src/resources/sounds/hurt3.wav")
+        
+        # Load Background Music
+        
+        # Music from Anttis:
+        # https://www.soundclick.com/artist/default.cfm?bandid=1277008&content=songs
+        # https://www.reddit.com/r/gameassets/comments/ewo5iu/i_have_released_my_2000_instrumental_pieces_free/
+        self.background_music = arcade.load_sound(file_path+"/src/resources/music/funkyrobot.mp3")
+        # Start the background music
+        arcade.play_sound(self.background_music)
 
         # Add messages
         self.message1 = None
@@ -1262,7 +1271,7 @@ class GameView(arcade.View):
         # Add Frame Counter
         self.frame_count += 1
 
-        # Calculate Jinx's level
+        # Calculate Spiny's level
         if self.score > 100:
             # Advance to the next level
             self.level_up = 1
@@ -1295,7 +1304,7 @@ class GameView(arcade.View):
                                             #    # Advance to the next level
                                             #    self.level_up = 10
 
-        # Calculate if Jinx on ground
+        # Calculate if Spiny on ground
         is_on_ground = self.physics_engine.is_on_ground(self.player_sprite)
         # Update player forces based on keys pressed
         if self.left_pressed and not self.right_pressed:
