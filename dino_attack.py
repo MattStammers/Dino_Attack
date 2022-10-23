@@ -328,6 +328,14 @@ class GreenWorm(Enemy):
         super().__init__("wormGreen", "wormGreen")
 
         self.health = 10
+        
+class Carnie(Enemy):
+    def __init__(self):
+
+        # Set up parent class
+        super().__init__("carnie", "carnie")
+
+        self.health = 2
 
 class BlueSlime(Enemy):
     def __init__(self):
@@ -952,6 +960,8 @@ class GameView(arcade.View):
             enemy_type = my_object.properties["type"]
             if enemy_type == "wormGreen":
                 enemy = GreenWorm()
+            elif enemy_type == "carnie":
+                enemy = Carnie()
             elif enemy_type == "slimeBlue":
                 enemy = BlueSlime()
             elif enemy_type == "snakeLava":
@@ -1378,7 +1388,7 @@ class GameView(arcade.View):
                 arcade.play_sound(self.shoot_sound)
                 if self.level_up <= 3:
                     player_bullet = arcade.Sprite(
-                        file_path + "/src/resources/images/weapons/swordBronze.png",
+                        file_path + "/src/resources/images/weapons/water.png",
                         SPRITE_SCALING_PROJECTILES/1.5,
                     )
                     
@@ -1685,6 +1695,8 @@ class GameView(arcade.View):
                             collision.remove_from_sprite_lists()
                             if type(enemy) == type(GreenWorm()):
                                 self.score += int(getattr(GreenWorm(),"health"))
+                            elif type(enemy) == type(Carnie()):
+                                self.score += int(getattr(Carnie(),"health"))
                             elif type(enemy) == type(BlueSlime()):
                                 self.score += int(getattr(BlueSlime(),"health"))
                             elif type(enemy) == type(GreenSlime()):
@@ -1782,6 +1794,10 @@ class GameView(arcade.View):
             if type(enemy) == type(GreenWorm()):
                 randfire(odds =2000, x=-1, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "meteorGrey_tiny1.png")
                 randfire(odds =2000, x=1, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "meteorGrey_tiny1.png")
+                
+            if type(enemy) == type(Carnie()):
+                randfire(odds =2000, x=-1, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spiker.png")
+                randfire(odds =2000, x=1, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spiker.png")
 
             elif type(enemy) == type(BlueSlime()):
                 randfire(odds =1000, x=-2, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "candyBlue.png")
