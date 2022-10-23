@@ -772,8 +772,7 @@ class GameView(arcade.View):
         # https://www.soundclick.com/artist/default.cfm?bandid=1277008&content=songs
         # https://www.reddit.com/r/gameassets/comments/ewo5iu/i_have_released_my_2000_instrumental_pieces_free/
         self.background_music = arcade.load_sound(file_path+"/src/resources/music/funkyrobot.mp3")
-        # Start the background music
-        arcade.play_sound(self.background_music)
+
 
         # Add messages
         self.message1 = None
@@ -855,6 +854,9 @@ class GameView(arcade.View):
         # Create the sprite lists
         self.player_list = arcade.SpriteList()
         self.grenade_list = arcade.SpriteList()
+        
+        # Start the background music
+        arcade.play_sound(self.background_music)
 
         # Map name
         map_name = file_path + f"/src/resources/images/tiled_maps/level_{self.level}.json"
