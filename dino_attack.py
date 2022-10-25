@@ -1614,7 +1614,7 @@ class GameView(arcade.View):
                         SPRITE_SCALING_PROJECTILES,
                     )
 
-                if self.player_sprite_1.character_face_direction == RIGHT_FACING:
+                if self.player_sprite_1.character_face_direction1 == RIGHT_FACING:
                     player_bullet.change_x = round(BULLET_SPEED*(self.p1_level_up+1),0)
                 else:
                     player_bullet.change_x = round(-BULLET_SPEED*(self.p1_level_up+1),0)
@@ -1628,13 +1628,64 @@ class GameView(arcade.View):
                 self.can_shoot1 = False
 
         else:
-            self.shoot_timer1 += 1
-            if self.shoot_timer1 >= SHOOT_SPEED+10:
-                self.shoot_timer1 = 0
-            elif self.shoot_timer1 == SHOOT_SPEED//(self.p1_level_up*self.p1_level_up+1):
-                self.can_shoot1 = True
-                self.shoot_timer1 = 0
+            self.shoot_timer2 += 1
+            if self.shoot_timer2 >= SHOOT_SPEED+10:
+                self.shoot_timer2 = 0
+            elif self.shoot_timer2 == SHOOT_SPEED//(self.p2_level_up*self.p2_level_up+1):
+                self.can_shoot2 = True
+                self.shoot_timer2 = 0
             
+        if self.can_shoot2:
+            if self.shoot_pressed2:
+                arcade.play_sound(self.shoot_sound)
+                if self.p2_level_up <= 3:
+                    player_bullet = arcade.Sprite(
+                        file_path + "/src/resources/images/weapons/flamer.png",
+                        SPRITE_SCALING_PROJECTILES/1.5,
+                    )
+                    
+                elif self.p2_level_up <= 6:
+                    arcade.play_sound(self.shoot_sound)
+                    player_bullet = arcade.Sprite(
+                        file_path + "/src/resources/images/weapons/fire.png", 
+                        SPRITE_SCALING_PROJECTILES/1.25,
+                    )
+                
+                elif self.p2_level_up <= 8:
+                    arcade.play_sound(self.shoot_sound)
+                    player_bullet = arcade.Sprite(
+                        file_path + "/src/resources/images/weapons/lava_ball.png", 
+                        SPRITE_SCALING_PROJECTILES,
+                    )
+                
+                elif self.p2_level_up <= 10:
+                    arcade.play_sound(self.shoot_sound)
+                    player_bullet = arcade.Sprite(
+                        file_path + "/src/resources/images/weapons/laserGreenHorizontal.png", 
+                        SPRITE_SCALING_PROJECTILES,
+                    )
+
+                if self.player_sprite_2.character_face_direction2 == RIGHT_FACING:
+                    player_bullet.change_x = round(BULLET_SPEED*(self.p2_level_up+1),0)
+                else:
+                    player_bullet.change_x = round(-BULLET_SPEED*(self.p2_level_up+1),0)
+                    player_bullet.angle = -180
+
+                player_bullet.center_x = self.player_sprite_2.center_x
+                player_bullet.center_y = self.player_sprite_2.center_y
+
+                self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS, player_bullet)
+
+                self.can_shoot2 = False
+
+        else:
+            self.shoot_timer2 += 1
+            if self.shoot_timer2 >= SHOOT_SPEED+10:
+                self.shoot_timer2 = 0
+            elif self.shoot_timer2 == SHOOT_SPEED//(self.p2_level_up*self.p2_level_up+1):
+                self.can_shoot2 = True
+                self.shoot_timer2 = 0
+        
 
         # Add shielding
         if self.can_shield1:
@@ -1656,7 +1707,7 @@ class GameView(arcade.View):
                         SPRITE_SCALING_PROJECTILES*1.25,
                         )
 
-                if self.player_sprite_1.character_face_direction == RIGHT_FACING:
+                if self.player_sprite_1.character_face_direction1 == RIGHT_FACING:
                     shield.change_x = 1
                     shield.center_x = self.player_sprite_1.center_x + 25
                 else:
