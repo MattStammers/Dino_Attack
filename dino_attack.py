@@ -696,14 +696,23 @@ class GameView(arcade.View):
         self.player_sprite_1: Optional[PlayerSprite] = None
         self.player_sprite_2: Optional[PlayerSprite] = None
 
-        # Track the current state of what key is pressed
-        self.left_pressed: bool = False
-        self.right_pressed: bool = False
-        self.up_pressed: bool = False
-        self.down_pressed: bool = False
-        self.shoot_pressed: bool = False
-        self.shield_pressed: bool = False
-        self.mouse_pressed: bool = False
+        # Track the current state of what key is pressed for player 1
+        self.left_pressed1: bool = False
+        self.right_pressed1: bool = False
+        self.up_pressed1: bool = False
+        self.down_pressed1: bool = False
+        self.shoot_pressed1: bool = False
+        self.shield_pressed1: bool = False
+        self.mouse_pressed1: bool = False
+        
+        # Track the current state of what key is pressed for player 2
+        self.left_pressed2: bool = False
+        self.right_pressed2: bool = False
+        self.up_pressed2: bool = False
+        self.down_pressed2: bool = False
+        self.shoot_pressed2: bool = False
+        self.shield_pressed2: bool = False
+        self.mouse_pressed2: bool = False
 
         # Physics engine
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
@@ -720,9 +729,9 @@ class GameView(arcade.View):
         # Our Scene Object
         self.scene = None
 
-        # Shooting mechanics
-        self.can_shoot = False
-        self.shoot_timer = 0
+        # Shooting mechanics - player 1
+        self.can_shoot1 = False
+        self.shoot_timer1 = 0
 
         # Shielding mechanics
         self.can_shield = False
@@ -740,7 +749,7 @@ class GameView(arcade.View):
         self.score = 0
 
         # Do we need to reset the score?
-        self.reset_score = True
+        self.reset_score1 = True
 
         # Set background color
         arcade.set_background_color(arcade.color.BLEU_DE_FRANCE)
@@ -838,17 +847,20 @@ class GameView(arcade.View):
         self.can_shield = True
         self.shield_timer = 0
 
-        # Shooting mechanics
-        self.can_shoot = True
-        self.shoot_timer = 0
-
-        # Shooting mechanics
-        self.mouse_pressed = False
+        # Shooting mechanics - Player 1
+        self.can_shoot1 = True
+        self.shoot_timer1 = 0
+        self.mouse_pressed1 = False
+        
+        # Shooting mechanics - Player 2
+        self.can_shoot2 = True
+        self.shoot_timer2 = 0
+        self.mouse_pressed2 = False
 
         # Keep track of the score, make sure we keep the score if the player finishes a level
-        if self.reset_score:
+        if self.reset_score1:
             self.score = 0
-        self.reset_score = False
+        self.reset_score1 = False
 
         # Set up the Camera
         self.camera = arcade.Camera(self.width, self.height)
@@ -1180,11 +1192,11 @@ class GameView(arcade.View):
         """Called whenever a key is pressed. """
 
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.left_pressed = True
+            self.left_pressed1 = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.right_pressed = True
+            self.right_pressed1 = True
         elif key == arcade.key.UP or key == arcade.key.W:
-            self.up_pressed = True
+            self.up_pressed1 = True
             arcade.play_sound(self.jump_sound)
             # find out if player is standing on ground, and not on a ladder
             if self.physics_engine.is_on_ground(self.player_sprite_1) \
@@ -1236,41 +1248,41 @@ class GameView(arcade.View):
                     self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
 
         elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.down_pressed = True
+            self.down_pressed1 = True
         
         # Adding shoot button
         if key == arcade.key.Q or key == arcade.key.N:
-            self.shoot_pressed = True
+            self.shoot_pressed1 = True
 
         # Adding shield button
         if key == arcade.key.E or key == arcade.key.M:
-            self.shield_pressed = True
+            self.shield_pressed1 = True
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.left_pressed = False
+            self.left_pressed1 = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.right_pressed = False
+            self.right_pressed1 = False
         elif key == arcade.key.UP or key == arcade.key.W:
-            self.up_pressed = False
+            self.up_pressed1 = False
         elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.down_pressed = False
+            self.down_pressed1 = False
 
         # Adding shoot button
         if key == arcade.key.Q or key == arcade.key.N:
-            self.shoot_pressed = False
+            self.shoot_pressed1 = False
 
         # Adding shield button
         if key == arcade.key.E or key == arcade.key.M:
-            self.shield_pressed = False
+            self.shield_pressed1 = False
 
 
     def on_mouse_press(self, x, y, button, modifiers):
         """ Called whenever the mouse button is clicked. """
 
-        self.mouse_pressed = True
+        self.mouse_pressed1 = True
         try:
             self.x = self.player_centered[0] + x
             self.y = self.player_centered[1] + y
@@ -1336,7 +1348,7 @@ class GameView(arcade.View):
         # Calculate if Spiny on ground
         is_on_ground = self.physics_engine.is_on_ground(self.player_sprite_1)
         # Update player forces based on keys pressed
-        if self.left_pressed and not self.right_pressed:
+        if self.left_pressed1 and not self.right_pressed1:
             # Create a force to the left. Apply it.
             if is_on_ground or self.player_sprite_1.is_on_ladder:
                 force = (-PLAYER_MOVE_FORCE_ON_GROUND, 0)
@@ -1345,7 +1357,7 @@ class GameView(arcade.View):
             self.physics_engine.apply_force(self.player_sprite_1, force)
             # Set friction to zero for the player while moving
             self.physics_engine.set_friction(self.player_sprite_1, 0)
-        elif self.right_pressed and not self.left_pressed:
+        elif self.right_pressed1 and not self.left_pressed1:
             # Create a force to the right. Apply it.
             if is_on_ground or self.player_sprite_1.is_on_ladder:
                 force = (PLAYER_MOVE_FORCE_ON_GROUND, 0)
@@ -1354,14 +1366,14 @@ class GameView(arcade.View):
             self.physics_engine.apply_force(self.player_sprite_1, force)
             # Set friction to zero for the player while moving
             self.physics_engine.set_friction(self.player_sprite_1, 0)
-        elif self.up_pressed and not self.down_pressed:
+        elif self.up_pressed1 and not self.down_pressed1:
             # Create a force to the right. Apply it.
             if self.player_sprite_1.is_on_ladder:
                 force = (0, PLAYER_MOVE_FORCE_ON_GROUND)
                 self.physics_engine.apply_force(self.player_sprite_1, force)
                 # Set friction to zero for the player while moving
                 self.physics_engine.set_friction(self.player_sprite_1, 0)
-        elif self.down_pressed and not self.up_pressed:
+        elif self.down_pressed1 and not self.up_pressed1:
             # Create a force to the right. Apply it.
             if self.player_sprite_1.is_on_ladder:
                 force = (0, -PLAYER_MOVE_FORCE_ON_GROUND)
@@ -1402,8 +1414,8 @@ class GameView(arcade.View):
             velocity = (moving_sprite.change_x * 1 / delta_time, moving_sprite.change_y * 1 / delta_time)
             self.physics_engine.set_velocity(moving_sprite, velocity)
 
-        if self.can_shoot:
-            if self.shoot_pressed:
+        if self.can_shoot1:
+            if self.shoot_pressed1:
                 arcade.play_sound(self.shoot_sound)
                 if self.level_up <= 3:
                     player_bullet = arcade.Sprite(
@@ -1443,20 +1455,20 @@ class GameView(arcade.View):
 
                 self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS, player_bullet)
 
-                self.can_shoot = False
+                self.can_shoot1 = False
 
         else:
-            self.shoot_timer += 1
-            if self.shoot_timer >= SHOOT_SPEED+10:
-                self.shoot_timer = 0
-            elif self.shoot_timer == SHOOT_SPEED//(self.level_up*self.level_up+1):
-                self.can_shoot = True
-                self.shoot_timer = 0
+            self.shoot_timer1 += 1
+            if self.shoot_timer1 >= SHOOT_SPEED+10:
+                self.shoot_timer1 = 0
+            elif self.shoot_timer1 == SHOOT_SPEED//(self.level_up*self.level_up+1):
+                self.can_shoot1 = True
+                self.shoot_timer1 = 0
             
 
         # Add shielding
         if self.can_shield:
-            if self.shield_pressed:
+            if self.shield_pressed1:
                 if self.level_up <=3:
                     shield = arcade.Sprite(file_path + "/src/resources/images/weapons/shieldBronze.png", 
                         SPRITE_SCALING_PROJECTILES/1.25,
@@ -1495,7 +1507,7 @@ class GameView(arcade.View):
                 self.shield_timer = 0
 
         # Add mouse shooting
-        if self.mouse_pressed:
+        if self.mouse_pressed1:
             if self.grenade_booster >=1:
                 self.grenade_booster -=1
                 for x in range(0,self.level_up):
@@ -1552,7 +1564,7 @@ class GameView(arcade.View):
                     self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
 
                     # Reset
-                    self.mouse_pressed = True
+                    self.mouse_pressed1 = True
 
             elif self.level_up>=1:
                 for x in range(0,self.level_up):
@@ -1609,7 +1621,7 @@ class GameView(arcade.View):
                     self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
 
                     # Reset
-                    self.mouse_pressed = False
+                    self.mouse_pressed1 = False
 
         # Check lives. If it is zero, flip to the game over view.
         if self.lives == 0:
@@ -2025,7 +2037,7 @@ class GameView(arcade.View):
                 self.can_die = False
             elif "Grenades" in power_up.properties:
                 self.grenade_booster = int(power_up.properties["Grenades"]) 
-                self.mouse_pressed = True
+                self.mouse_pressed1 = True
             elif "Speed" in power_up.properties:
                 speed = int(power_up.properties["Speed"])       
             elif "Gravity" in power_up.properties:
@@ -2087,7 +2099,7 @@ class GameView(arcade.View):
             self.level += 1
 
             # Make sure to keep the score from this level when setting up the next level
-            self.reset_score = False
+            self.reset_score1 = False
 
             # Load the next level
             self.setup()
