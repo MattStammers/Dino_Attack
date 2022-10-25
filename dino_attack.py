@@ -1726,6 +1726,48 @@ class GameView(arcade.View):
             elif self.shield_timer1 == SHIELD_SPEED//(self.p1_level_up*self.p1_level_up+1):
                 self.can_shield1 = True
                 self.shield_timer1 = 0
+                
+                
+        # Add shielding
+        if self.can_shield2:
+            if self.shield_pressed2:
+                if self.p2_level_up <=3:
+                    shield = arcade.Sprite(file_path + "/src/resources/images/weapons/shieldBronze.png", 
+                        SPRITE_SCALING_PROJECTILES/1.25,
+                        )
+                elif self.p2_level_up <=6:
+                    shield = arcade.Sprite(file_path + "/src/resources/images/weapons/shieldSilver.png", 
+                        SPRITE_SCALING_PROJECTILES,
+                        )
+                elif self.p2_level_up <=9:
+                    shield = arcade.Sprite(file_path + "/src/resources/images/weapons/shieldGold.png", 
+                        SPRITE_SCALING_PROJECTILES*1.25,
+                        )
+                elif self.p2_level_up <=10:
+                    shield = arcade.Sprite(file_path + "/src/resources/images/weapons/chomper_bullet.png", 
+                        SPRITE_SCALING_PROJECTILES*1.25,
+                        )
+
+                if self.player_sprite_2.character_face_direction2 == RIGHT_FACING:
+                    shield.change_x = 1
+                    shield.center_x = self.player_sprite_2.center_x + 25
+                else:
+                    shield.change_x = -1
+                    shield.center_x = self.player_sprite_2.center_x - 25
+                
+                shield.center_y = self.player_sprite_2.center_y
+
+                self.scene.add_sprite(LAYER_NAME_SHIELD, shield)
+
+                self.can_shield2 = False
+        else:
+            self.shield_timer2 += 1
+            if self.shield_timer2 >= SHIELD_SPEED + 10:
+                self.shield_timer2 = 0
+            elif self.shield_timer2 == SHIELD_SPEED//(self.p2_level_up*self.p2_level_up+1):
+                self.can_shield2 = True
+                self.shield_timer2 = 0
+
 
         # Add mouse shooting
         if self.mouse_pressed1:
