@@ -35,8 +35,10 @@ LAYER_NAME_MOVING_PLATFORMS = "Moving Platforms"
 LAYER_NAME_ENEMIES = "Enemies"
 LAYER_NAME_DYNAMIC_ITEMS = "Dynamic Items"
 LAYER_NAME_DYNAMIC_TILES = "Dynamic Tiles"
-LAYER_NAME_PLAYER_BULLETS = "Player Bullets"
-LAYER_NAME_PLAYER_GRENADES = "Player Grenades"
+LAYER_NAME_PLAYER_BULLETS1 = "Player1 Bullets"
+LAYER_NAME_PLAYER_BULLETS2 = "Player2 Bullets"
+LAYER_NAME_PLAYER_GRENADES1 = "Player1 Grenades"
+LAYER_NAME_PLAYER_GRENADES2 = "Player1 Grenades"
 LAYER_NAME_ENEMY_BULLETS = "Enemy Bullets"
 LAYER_NAME_ALLIES = "Allies"
 LAYER_NAME_SHIELD = "Shield"
@@ -1086,14 +1088,16 @@ class GameView(arcade.View):
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
 
         # Add bullet spritelist to Scene
-        self.scene.add_sprite_list(LAYER_NAME_PLAYER_BULLETS)
+        self.scene.add_sprite_list(LAYER_NAME_PLAYER_BULLETS1)
+        self.scene.add_sprite_list(LAYER_NAME_PLAYER_BULLETS2)
 
         # Add enemy bullets and shields
         self.scene.add_sprite_list(LAYER_NAME_ENEMY_BULLETS)
         self.scene.add_sprite_list(LAYER_NAME_SHIELD)
 
         # Add grenade spritelist to Scene
-        self.scene.add_sprite_list(LAYER_NAME_PLAYER_GRENADES)
+        self.scene.add_sprite_list(LAYER_NAME_PLAYER_GRENADES1)
+        self.scene.add_sprite_list(LAYER_NAME_PLAYER_GRENADES2)
 
         # --- Pymunk Physics Engine Setup ---
 
@@ -1657,7 +1661,7 @@ class GameView(arcade.View):
                 player_bullet.center_x = self.player_sprite_1.center_x
                 player_bullet.center_y = self.player_sprite_1.center_y
 
-                self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS, player_bullet)
+                self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS1, player_bullet)
 
                 self.can_shoot1 = False
 
@@ -1708,7 +1712,7 @@ class GameView(arcade.View):
                 player_bullet.center_x = self.player_sprite_2.center_x
                 player_bullet.center_y = self.player_sprite_2.center_y
 
-                self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS, player_bullet)
+                self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS2, player_bullet)
 
                 self.can_shoot2 = False
 
@@ -1858,7 +1862,7 @@ class GameView(arcade.View):
                     # Add force to bullet
                     force = (BULLET_MOVE_FORCE*self.p1_level_up, 0)
                     self.physics_engine.apply_force(grenade, force)
-                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES1, grenade)
 
                     # Reset
                     self.mouse_pressed1 = True
@@ -1915,7 +1919,7 @@ class GameView(arcade.View):
                     # Add force to bullet
                     force = (BULLET_MOVE_FORCE*self.p1_level_up, 0)
                     self.physics_engine.apply_force(grenade, force)
-                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES1, grenade)
 
                     # Reset
                     self.mouse_pressed1 = False
@@ -1975,7 +1979,7 @@ class GameView(arcade.View):
                     # Add force to bullet
                     force = (BULLET_MOVE_FORCE*self.p2_level_up, 0)
                     self.physics_engine.apply_force(grenade, force)
-                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES2, grenade)
 
                     # Reset
                     self.mouse_pressed2 = True
@@ -2032,13 +2036,13 @@ class GameView(arcade.View):
                     # Add force to bullet
                     force = (BULLET_MOVE_FORCE*self.p2_level_up, 0)
                     self.physics_engine.apply_force(grenade, force)
-                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES2, grenade)
 
                     # Reset
                     self.mouse_pressed2 = False
 
         # Check lives. If it is zero, flip to the game over view.
-        if self.p1_lives == 0:
+        if self.p1_lives == 0 & self.p2_lives == 0:
             view = GameOverView()
             self.window.show_view(view)
 
@@ -2054,8 +2058,10 @@ class GameView(arcade.View):
         self.scene.update(
             [LAYER_NAME_ENEMIES, 
             LAYER_NAME_ENEMY_BULLETS, 
-            LAYER_NAME_PLAYER_BULLETS, 
-            LAYER_NAME_PLAYER_GRENADES,
+            LAYER_NAME_PLAYER_BULLETS1, 
+            LAYER_NAME_PLAYER_BULLETS2, 
+            LAYER_NAME_PLAYER_GRENADES1,
+            LAYER_NAME_PLAYER_GRENADES2,
             LAYER_NAME_ALLIES]
         )
 
@@ -2091,7 +2097,7 @@ class GameView(arcade.View):
             ):
                 ally.change_x *= -1
 
-        for projectile in self.scene[LAYER_NAME_PLAYER_BULLETS] or self.scene[LAYER_NAME_PLAYER_GRENADES]:
+        for projectile in self.scene[LAYER_NAME_PLAYER_BULLETS1] or self.scene[LAYER_NAME_PLAYER_GRENADES1] or self.scene[LAYER_NAME_PLAYER_BULLETS2] or self.scene[LAYER_NAME_PLAYER_GRENADES2]:
             hit_list = arcade.check_for_collision_with_lists(
                 projectile,
                 [
@@ -2135,6 +2141,29 @@ class GameView(arcade.View):
                             collision.health -= PLAYER_BULLET_DAMAGE*8  
                         elif self.p1_level_up == 10:
                             collision.health -= PLAYER_BULLET_DAMAGE*10             
+                        elif self.p2_level_up == 0:
+                            collision.health -= PLAYER_BULLET_DAMAGE/5
+                        elif self.p2_level_up == 1:
+                            collision.health -= PLAYER_BULLET_DAMAGE/4
+                        elif self.p2_level_up == 2:
+                            collision.health -= PLAYER_BULLET_DAMAGE/3
+                        elif self.p2_level_up == 3:
+                            collision.health -= PLAYER_BULLET_DAMAGE/2
+                        elif self.p2_level_up == 4:
+                            collision.health -= PLAYER_BULLET_DAMAGE 
+                        elif self.p2_level_up == 5:
+                            collision.health -= PLAYER_BULLET_DAMAGE*1.5
+                        elif self.p2_level_up == 6:
+                            collision.health -= PLAYER_BULLET_DAMAGE*2
+                        elif self.p2_level_up == 7:
+                            collision.health -= PLAYER_BULLET_DAMAGE*4  
+                        elif self.p2_level_up == 8:
+                            collision.health -= PLAYER_BULLET_DAMAGE*6 
+                        elif self.p2_level_up == 9:
+                            collision.health -= PLAYER_BULLET_DAMAGE*8  
+                        elif self.p2_level_up == 10:
+                            collision.health -= PLAYER_BULLET_DAMAGE*10             
+
 
                         if collision.health <= 0:
                             collision.remove_from_sprite_lists()
@@ -2174,6 +2203,42 @@ class GameView(arcade.View):
                                 self.p1_score += int(getattr(MasterVerse(),"health"))
                             elif type(enemy) == type(FlufflePop()):
                                 self.p1_score += int(getattr(FlufflePop(),"health"))
+                            elif type(enemy) == type(GreenWorm()):
+                                self.p2_score += int(getattr(GreenWorm(),"health"))
+                            elif type(enemy) == type(Carnie()):
+                                self.p2_score += int(getattr(Carnie(),"health"))
+                            elif type(enemy) == type(BlueSlime()):
+                                self.p2_score += int(getattr(BlueSlime(),"health"))
+                            elif type(enemy) == type(GreenSlime()):
+                                self.p2_score += int(getattr(GreenSlime(),"health"))
+                            elif type(enemy) == type(PurpleSlime()):
+                                self.p2_score += int(getattr(PurpleSlime(),"health"))
+                            elif type(enemy) == type(SilverSlime()):
+                                self.p2_score += int(getattr(SilverSlime(),"health"))
+                            elif type(enemy) == type(LavaSnake()):
+                                self.p2_score += int(getattr(LavaSnake(),"health"))
+                            elif type(enemy) == type(BlueSlimeBoss()):
+                                self.p2_score += int(getattr(BlueSlimeBoss(),"health"))
+                            elif type(enemy) == type(RobotEnemy()):
+                                self.p2_score += int(getattr(RobotEnemy(),"health"))
+                            elif type(enemy) == type(Chomper()):
+                                self.p2_score += int(getattr(Chomper(),"health"))
+                            elif type(enemy) == type(DiamondShooter()):
+                                self.p2_score += int(getattr(DiamondShooter(),"health"))
+                            elif type(enemy) == type(PrimarySlime()):
+                                self.p2_score += int(getattr(PrimarySlime(),"health"))
+                            elif type(enemy) == type(SecondarySlime()):
+                                 self.p2_score += int(getattr(SecondarySlime(),"health"))
+                            elif type(enemy) == type(Thunderer()):
+                                self.p2_score += int(getattr(Thunderer(),"health"))
+                            elif type(enemy) == type(SuperThunderer()):
+                                self.p2_score += int(getattr(SuperThunderer(),"health"))
+                            elif type(enemy) == type(RolyPolyBot()):
+                                self.p2_score += int(getattr(RolyPolyBot(),"health"))
+                            elif type(enemy) == type(MasterVerse()):
+                                self.p2_score += int(getattr(MasterVerse(),"health"))
+                            elif type(enemy) == type(FlufflePop()):
+                                self.p2_score += int(getattr(FlufflePop(),"health"))
 
                         # Hit sound
                         arcade.play_sound(self.hit_sound)
@@ -2426,7 +2491,8 @@ class GameView(arcade.View):
                 print("Warning, collected a coin without a Points property.")
             else:
                 points = int(coin.properties["Points"])
-                self.p1_score += points
+                self.p1_score += points,
+                self.p2_score += points
             # Remove the coin
             coin.remove_from_sprite_lists()
             # Play a sound
@@ -2438,7 +2504,8 @@ class GameView(arcade.View):
                 print("Warning, collected a heart without a Lives property.")
             else:
                 lives = int(heart.properties["Lives"])
-                self.p1_lives += lives
+                self.p1_lives += lives,
+                self.p2_lives += lives
             # Remove the coin
             heart.remove_from_sprite_lists()
             # Play a sound
@@ -2449,9 +2516,15 @@ class GameView(arcade.View):
             if "Shield" in power_up.properties:
                 self.invincibility_timer1 = int(power_up.properties["Shield"])
                 self.can_die1 = False
+            elif "Shield" in power_up.properties:
+                self.invincibility_timer2 = int(power_up.properties["Shield"])
+                self.can_die2 = False
             elif "Grenades" in power_up.properties:
                 self.grenade_booster1 = int(power_up.properties["Grenades"]) 
                 self.mouse_pressed1 = True
+            elif "Grenades" in power_up.properties:
+                self.grenade_booster2 = int(power_up.properties["Grenades"]) 
+                self.mouse_pressed2 = True
             elif "Speed" in power_up.properties:
                 speed = int(power_up.properties["Speed"])       
             elif "Gravity" in power_up.properties:
@@ -2492,11 +2565,43 @@ class GameView(arcade.View):
                     self.death_timer1 = 0
                 elif self.invincibility_timer1 <= 0:
                     self.invincibility_timer1 = 0 
+        
+        for collision in enemy_collision_list:
+            if self.can_die2:
+                if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists:
+                # If we collide with an enemy then we lose a life
+                    arcade.play_sound(self.game_over)
+                    self.p2_lives -=1
+                    self.can_die1 = False
+                    return
+                elif self.scene[LAYER_NAME_ENEMY_BULLETS] in collision.sprite_lists:
+                    arcade.play_sound(self.game_over)
+                    self.p2_lives -=1
+                    self.can_die1 = False
+                    return   
+            else:
+                self.death_timer2 +=1
+                self.invincibility_timer2 -= 1
+                if self.invincibility_timer2 > 0:
+                    self.can_die2 = False
+                elif self.death_timer2 > DEATH_PROTECT + 200 :
+                    self.death_timer2 = 0
+                elif self.invincibility_timer2 <= 0 and self.death_timer2 >= DEATH_PROTECT:
+                    self.can_die1 = True
+                    self.invincibility_timer2 = 0 
+                    self.death_timer1 = 0
+                elif self.invincibility_timer2 <= 0:
+                    self.invincibility_timer2 = 0    
+                
 
         # Did the player fall off the map?
         if self.player_sprite_1.center_y < -100:
             arcade.play_sound(self.game_over)
             self.p1_lives -=1
+            self.setup()
+        if self.player_sprite_2.center_y < -100:
+            arcade.play_sound(self.game_over)
+            self.p2_lives -=1
             self.setup()
 
         # Did the player touch something they should not?
@@ -2505,6 +2610,13 @@ class GameView(arcade.View):
         ):
             arcade.play_sound(self.game_over)
             self.p1_lives -=1
+            self.setup()
+            
+        if arcade.check_for_collision_with_list(
+            self.player_sprite_2, self.dont_touch_list
+        ):
+            arcade.play_sound(self.game_over)
+            self.p2_lives -=1
             self.setup()
 
         # See if the user got to the end of the level
