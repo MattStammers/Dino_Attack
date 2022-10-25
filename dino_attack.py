@@ -154,7 +154,8 @@ class PlayerSprite(arcade.Sprite):
         self.hit_box = self.texture.hit_box_points
 
         # Default to face-right
-        self.character_face_direction = RIGHT_FACING
+        self.character_face_direction1 = RIGHT_FACING
+        self.character_face_direction2 = RIGHT_FACING
 
         # Index of our current texture
         self.cur_texture = 0
@@ -169,13 +170,18 @@ class PlayerSprite(arcade.Sprite):
     def pymunk_moved(self, physics_engine, dx, dy, d_angle):
         """ Handle being moved by the pymunk engine """
         # Figure out if we need to face left or right
-        if dx < -DEAD_ZONE and self.character_face_direction == RIGHT_FACING:
-            self.character_face_direction = LEFT_FACING
-        elif dx > DEAD_ZONE and self.character_face_direction == LEFT_FACING:
-            self.character_face_direction = RIGHT_FACING
+        if dx < -DEAD_ZONE and self.character_face_direction1 == RIGHT_FACING:
+            self.character_face_direction1 = LEFT_FACING
+        elif dx > DEAD_ZONE and self.character_face_direction1 == LEFT_FACING:
+            self.character_face_direction1 = RIGHT_FACING
+        elif dx < -DEAD_ZONE and self.character_face_direction2 == RIGHT_FACING:
+            self.character_face_direction2 = LEFT_FACING
+        elif dx > DEAD_ZONE and self.character_face_direction2 == LEFT_FACING:
+            self.character_face_direction2 = RIGHT_FACING
 
         # Are we on the ground?
-        is_on_ground = physics_engine.is_on_ground(self)
+        is_on_ground1 = physics_engine.is_on_ground(self)
+        is_on_ground2 = physics_engine.is_on_ground(self)
 
         # Are we on a ladder?
         if len(arcade.check_for_collision_with_list(self, self.ladder_list)) > 0:
@@ -195,7 +201,7 @@ class PlayerSprite(arcade.Sprite):
         self.x_odometer += dx
         self.y_odometer += dy
 
-        if self.is_on_ladder and not is_on_ground:
+        if self.is_on_ladder and not is_on_ground1:
             # Have we moved far enough to change the texture?
             if abs(self.y_odometer) > DISTANCE_TO_CHANGE_TEXTURE:
 
@@ -211,17 +217,17 @@ class PlayerSprite(arcade.Sprite):
             return
 
         # Jumping animation
-        if not is_on_ground:
+        if not is_on_ground1:
             if dy > DEAD_ZONE:
-                self.texture = self.jump_texture_pair[self.character_face_direction]
+                self.texture = self.jump_texture_pair[self.character_face_direction1]
                 return
             elif dy < -DEAD_ZONE:
-                self.texture = self.fall_texture_pair[self.character_face_direction]
+                self.texture = self.fall_texture_pair[self.character_face_direction1]
                 return
 
         # Idle animation
         if abs(dx) <= DEAD_ZONE:
-            self.texture = self.idle_texture_pair[self.character_face_direction]
+            self.texture = self.idle_texture_pair[self.character_face_direction1]
             return
 
         # Have we moved far enough to change the texture?
@@ -234,7 +240,7 @@ class PlayerSprite(arcade.Sprite):
             self.cur_texture += 1
             if self.cur_texture > 7:
                 self.cur_texture = 0
-            self.texture = self.walk_textures[self.cur_texture][self.character_face_direction]
+            self.texture = self.walk_textures[self.cur_texture][self.character_face_direction1]
 
 SPRITE_SCALING_ENEMIES = 0.8
 ENEMY_SPRITE_IMAGE_SIZE = 64
@@ -1212,11 +1218,68 @@ class GameView(arcade.View):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
-        if key == arcade.key.LEFT or key == arcade.key.A:
+        if key == arcade.key.A:
             self.left_pressed1 = True
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.right_pressed1 = True
-        elif key == arcade.key.UP or key == arcade.key.W:
+        elif key == arcade.key.LEFT:
+            self.left_pressed2 = True
+        elif key == arcade.key.D:
+            self.right_pressed1 = True    
+        elif key == arcade.key.RIGHT:
+            self.right_pressed2 = True
+        
+        # Jumping    
+        elif key == arcade.key.UP:
+            self.up_pressed2 = True
+            arcade.play_sound(self.jump_sound)
+            # find out if player is standing on ground, and not on a ladder
+            if self.physics_engine.is_on_ground(self.player_sprite_2) \
+                    and not self.player_sprite_2.is_on_ladder:
+                # if on ground use control flow to filter jump speed based on player level
+                if self.p2_level_up <= 0:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE//2)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 1:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE//1.75)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 2:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE//1.5)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 3:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE//1.25)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 4:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 5:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*1.25)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 6:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*1.5)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 7:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*1.75)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 8:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*2)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 9:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*2.25)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+                elif self.p2_level_up <= 10:
+                    # Go ahead and jump
+                    impulse = (0, PLAYER_JUMP_IMPULSE*2.5)
+                    self.physics_engine.apply_impulse(self.player_sprite_2, impulse)
+        elif key == arcade.key.W:
             self.up_pressed1 = True
             arcade.play_sound(self.jump_sound)
             # find out if player is standing on ground, and not on a ladder
@@ -1268,36 +1331,54 @@ class GameView(arcade.View):
                     impulse = (0, PLAYER_JUMP_IMPULSE*2.5)
                     self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
 
-        elif key == arcade.key.DOWN or key == arcade.key.S:
+        elif key == arcade.key.S:
             self.down_pressed1 = True
+        elif key == arcade.key.DOWN:
+            self.down_pressed2 = True
         
         # Adding shoot button
-        if key == arcade.key.Q or key == arcade.key.N:
+        if key == arcade.key.Q:
             self.shoot_pressed1 = True
+        if key == arcade.key.N:
+            self.shoot_pressed2 = True
 
         # Adding shield button
-        if key == arcade.key.E or key == arcade.key.M:
+        if key == arcade.key.E:
             self.shield_pressed1 = True
+        if key == arcade.key.M:
+            self.shield_pressed2 = True
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.LEFT or key == arcade.key.A:
+        if key == arcade.key.A:
             self.left_pressed1 = False
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
+        elif key == arcade.key.LEFT:
+            self.left_pressed2 = False
+        elif key == arcade.key.D:
             self.right_pressed1 = False
-        elif key == arcade.key.UP or key == arcade.key.W:
+        elif key == arcade.key.RIGHT:
+            self.right_pressed2 = False
+        elif key == arcade.key.W:
             self.up_pressed1 = False
-        elif key == arcade.key.DOWN or key == arcade.key.S:
+        elif key == arcade.key.UP:
+            self.up_pressed2 = False
+        elif key == arcade.key.S:
             self.down_pressed1 = False
+        elif key == arcade.key.DOWN:
+            self.down_pressed2 = False
 
         # Adding shoot button
-        if key == arcade.key.Q or key == arcade.key.N:
+        if key == arcade.key.Q:
             self.shoot_pressed1 = False
+        elif key == arcade.key.N:
+            self.shoot_pressed2 = False
 
         # Adding shield button
-        if key == arcade.key.E or key == arcade.key.M:
+        if key == arcade.key.E:
             self.shield_pressed1 = False
+        elif key == arcade.key.M:
+            self.shield_pressed2 = False
 
 
     def on_mouse_press(self, x, y, button, modifiers):
@@ -1366,12 +1447,14 @@ class GameView(arcade.View):
                                             #    # Advance to the next level
                                             #    self.p1_level_up = 10
 
-        # Calculate if Spiny on ground
-        is_on_ground = self.physics_engine.is_on_ground(self.player_sprite_1)
+        # Calculate if Player on ground
+        is_on_ground1 = self.physics_engine.is_on_ground(self.player_sprite_1)
+        is_on_ground2 = self.physics_engine.is_on_ground(self.player_sprite_2)
+        
         # Update player forces based on keys pressed
         if self.left_pressed1 and not self.right_pressed1:
             # Create a force to the left. Apply it.
-            if is_on_ground or self.player_sprite_1.is_on_ladder:
+            if is_on_ground1 or self.player_sprite_1.is_on_ladder:
                 force = (-PLAYER_MOVE_FORCE_ON_GROUND, 0)
             else:
                 force = (-PLAYER_MOVE_FORCE_IN_AIR, 0)
@@ -1380,7 +1463,7 @@ class GameView(arcade.View):
             self.physics_engine.set_friction(self.player_sprite_1, 0)
         elif self.right_pressed1 and not self.left_pressed1:
             # Create a force to the right. Apply it.
-            if is_on_ground or self.player_sprite_1.is_on_ladder:
+            if is_on_ground1 or self.player_sprite_1.is_on_ladder:
                 force = (PLAYER_MOVE_FORCE_ON_GROUND, 0)
             else:
                 force = (PLAYER_MOVE_FORCE_IN_AIR, 0)
@@ -1447,14 +1530,14 @@ class GameView(arcade.View):
                 elif self.p1_level_up <= 6:
                     arcade.play_sound(self.shoot_sound)
                     player_bullet = arcade.Sprite(
-                        file_path + "/src/resources/images/weapons/swordSilver.png", 
+                        file_path + "/src/resources/images/weapons/chomper_bullet.png", 
                         SPRITE_SCALING_PROJECTILES/1.25,
                     )
                 
                 elif self.p1_level_up <= 8:
                     arcade.play_sound(self.shoot_sound)
                     player_bullet = arcade.Sprite(
-                        file_path + "/src/resources/images/weapons/swordGold.png", 
+                        file_path + "/src/resources/images/weapons/spinner_big.png", 
                         SPRITE_SCALING_PROJECTILES,
                     )
                 
