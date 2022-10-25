@@ -692,7 +692,7 @@ class GameView(arcade.View):
         self.player_list: Optional[arcade.SpriteList] = None
 
         # Player sprite
-        self.player_sprite: Optional[PlayerSprite] = None
+        self.player_sprite_1: Optional[PlayerSprite] = None
 
         # Track the current state of what key is pressed
         self.left_pressed: bool = False
@@ -881,14 +881,14 @@ class GameView(arcade.View):
         self.power_ups_list = self.tile_map.sprite_lists[LAYER_NAME_POWER_UPS]
 
         # Create player sprite
-        self.player_sprite = PlayerSprite(self.ladder_list, hit_box_algorithm="Detailed")
+        self.player_sprite_1 = PlayerSprite(self.ladder_list, hit_box_algorithm="Detailed")
 
         # Set player start location
-        self.player_sprite.center_x = SPRITE_SIZE * start_grid_x + SPRITE_SIZE / 2
-        self.player_sprite.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2
+        self.player_sprite_1.center_x = SPRITE_SIZE * start_grid_x + SPRITE_SIZE / 2
+        self.player_sprite_1.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2
         
         # Add to player sprite list
-        self.player_list.append(self.player_sprite)
+        self.player_list.append(self.player_sprite_1)
 
         # Make sure that forground is added afterwards
         self.foreground_list = self.tile_map.sprite_lists[LAYER_NAME_FOREGROUND]
@@ -1062,7 +1062,7 @@ class GameView(arcade.View):
         # Friction is between two objects in contact. It is important to remember
         # in top-down games that friction moving along the 'floor' is controlled
         # by damping.
-        self.physics_engine.add_sprite(self.player_sprite,
+        self.physics_engine.add_sprite(self.player_sprite_1,
                                        friction=PLAYER_FRICTION,
                                        mass=PLAYER_MASS,
                                        moment=arcade.PymunkPhysicsEngine.MOMENT_INF,
@@ -1170,53 +1170,53 @@ class GameView(arcade.View):
             self.up_pressed = True
             arcade.play_sound(self.jump_sound)
             # find out if player is standing on ground, and not on a ladder
-            if self.physics_engine.is_on_ground(self.player_sprite) \
-                    and not self.player_sprite.is_on_ladder:
+            if self.physics_engine.is_on_ground(self.player_sprite_1) \
+                    and not self.player_sprite_1.is_on_ladder:
                 # if on ground use control flow to filter jump speed based on player level
                 if self.level_up <= 0:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE//2)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 1:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE//1.75)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 2:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE//1.5)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 3:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE//1.25)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 4:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 5:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*1.25)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 6:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*1.5)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 7:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*1.75)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 8:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*2)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 9:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*2.25)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
                 elif self.level_up <= 10:
                     # Go ahead and jump
                     impulse = (0, PLAYER_JUMP_IMPULSE*2.5)
-                    self.physics_engine.apply_impulse(self.player_sprite, impulse)
+                    self.physics_engine.apply_impulse(self.player_sprite_1, impulse)
 
         elif key == arcade.key.DOWN or key == arcade.key.S:
             self.down_pressed = True
@@ -1261,8 +1261,8 @@ class GameView(arcade.View):
             print("An mouse exception occurred")
 
     def center_camera_to_player(self):
-        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (
+        screen_center_x = self.player_sprite_1.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite_1.center_y - (
             self.camera.viewport_height / 2
         )
 
@@ -1317,44 +1317,44 @@ class GameView(arcade.View):
                                             #    self.level_up = 10
 
         # Calculate if Spiny on ground
-        is_on_ground = self.physics_engine.is_on_ground(self.player_sprite)
+        is_on_ground = self.physics_engine.is_on_ground(self.player_sprite_1)
         # Update player forces based on keys pressed
         if self.left_pressed and not self.right_pressed:
             # Create a force to the left. Apply it.
-            if is_on_ground or self.player_sprite.is_on_ladder:
+            if is_on_ground or self.player_sprite_1.is_on_ladder:
                 force = (-PLAYER_MOVE_FORCE_ON_GROUND, 0)
             else:
                 force = (-PLAYER_MOVE_FORCE_IN_AIR, 0)
-            self.physics_engine.apply_force(self.player_sprite, force)
+            self.physics_engine.apply_force(self.player_sprite_1, force)
             # Set friction to zero for the player while moving
-            self.physics_engine.set_friction(self.player_sprite, 0)
+            self.physics_engine.set_friction(self.player_sprite_1, 0)
         elif self.right_pressed and not self.left_pressed:
             # Create a force to the right. Apply it.
-            if is_on_ground or self.player_sprite.is_on_ladder:
+            if is_on_ground or self.player_sprite_1.is_on_ladder:
                 force = (PLAYER_MOVE_FORCE_ON_GROUND, 0)
             else:
                 force = (PLAYER_MOVE_FORCE_IN_AIR, 0)
-            self.physics_engine.apply_force(self.player_sprite, force)
+            self.physics_engine.apply_force(self.player_sprite_1, force)
             # Set friction to zero for the player while moving
-            self.physics_engine.set_friction(self.player_sprite, 0)
+            self.physics_engine.set_friction(self.player_sprite_1, 0)
         elif self.up_pressed and not self.down_pressed:
             # Create a force to the right. Apply it.
-            if self.player_sprite.is_on_ladder:
+            if self.player_sprite_1.is_on_ladder:
                 force = (0, PLAYER_MOVE_FORCE_ON_GROUND)
-                self.physics_engine.apply_force(self.player_sprite, force)
+                self.physics_engine.apply_force(self.player_sprite_1, force)
                 # Set friction to zero for the player while moving
-                self.physics_engine.set_friction(self.player_sprite, 0)
+                self.physics_engine.set_friction(self.player_sprite_1, 0)
         elif self.down_pressed and not self.up_pressed:
             # Create a force to the right. Apply it.
-            if self.player_sprite.is_on_ladder:
+            if self.player_sprite_1.is_on_ladder:
                 force = (0, -PLAYER_MOVE_FORCE_ON_GROUND)
-                self.physics_engine.apply_force(self.player_sprite, force)
+                self.physics_engine.apply_force(self.player_sprite_1, force)
                 # Set friction to zero for the player while moving
-                self.physics_engine.set_friction(self.player_sprite, 0)
+                self.physics_engine.set_friction(self.player_sprite_1, 0)
 
         else:
             # Player's feet are not moving. Therefore up the friction so we stop.
-            self.physics_engine.set_friction(self.player_sprite, 1.0)
+            self.physics_engine.set_friction(self.player_sprite_1, 1.0)
 
         # Move items in the physics engine
         self.physics_engine.step()
@@ -1415,14 +1415,14 @@ class GameView(arcade.View):
                         SPRITE_SCALING_PROJECTILES,
                     )
 
-                if self.player_sprite.character_face_direction == RIGHT_FACING:
+                if self.player_sprite_1.character_face_direction == RIGHT_FACING:
                     player_bullet.change_x = round(BULLET_SPEED*(self.level_up+1),0)
                 else:
                     player_bullet.change_x = round(-BULLET_SPEED*(self.level_up+1),0)
                     player_bullet.angle = -180
 
-                player_bullet.center_x = self.player_sprite.center_x
-                player_bullet.center_y = self.player_sprite.center_y
+                player_bullet.center_x = self.player_sprite_1.center_x
+                player_bullet.center_y = self.player_sprite_1.center_y
 
                 self.scene.add_sprite(LAYER_NAME_PLAYER_BULLETS, player_bullet)
 
@@ -1457,14 +1457,14 @@ class GameView(arcade.View):
                         SPRITE_SCALING_PROJECTILES*1.25,
                         )
 
-                if self.player_sprite.character_face_direction == RIGHT_FACING:
+                if self.player_sprite_1.character_face_direction == RIGHT_FACING:
                     shield.change_x = 1
-                    shield.center_x = self.player_sprite.center_x + 25
+                    shield.center_x = self.player_sprite_1.center_x + 25
                 else:
                     shield.change_x = -1
-                    shield.center_x = self.player_sprite.center_x - 25
+                    shield.center_x = self.player_sprite_1.center_x - 25
                 
-                shield.center_y = self.player_sprite.center_y
+                shield.center_y = self.player_sprite_1.center_y
 
                 self.scene.add_sprite(LAYER_NAME_SHIELD, shield)
 
@@ -1486,9 +1486,9 @@ class GameView(arcade.View):
                     self.grenade_list.append(grenade)
 
                     # Position the grenade at the player's current location
-                    start_x = self.player_sprite.center_x
-                    start_y = self.player_sprite.center_y
-                    grenade.position = self.player_sprite.position
+                    start_x = self.player_sprite_1.center_x
+                    start_y = self.player_sprite_1.center_y
+                    grenade.position = self.player_sprite_1.position
 
                     # Get from the mouse the destination location for the grenade
                     # IMPORTANT! If you have a scrolling screen, you will also need
@@ -1505,7 +1505,7 @@ class GameView(arcade.View):
 
                     # What is the 1/2 size of this sprite, so we can figure out how far
                     # away to spawn the grenade
-                    size = max(self.player_sprite.width, self.player_sprite.height) / 2
+                    size = max(self.player_sprite_1.width, self.player_sprite_1.height) / 2
 
                     # Use angle to to spawn bullet away from player in proper direction
                     grenade.center_x += size * math.cos(angle)
@@ -1543,9 +1543,9 @@ class GameView(arcade.View):
                     self.grenade_list.append(grenade)
 
                     # Position the grenade at the player's current location
-                    start_x = self.player_sprite.center_x
-                    start_y = self.player_sprite.center_y
-                    grenade.position = self.player_sprite.position
+                    start_x = self.player_sprite_1.center_x
+                    start_y = self.player_sprite_1.center_y
+                    grenade.position = self.player_sprite_1.position
 
                     # Get from the mouse the destination location for the grenade
                     # IMPORTANT! If you have a scrolling screen, you will also need
@@ -1562,7 +1562,7 @@ class GameView(arcade.View):
 
                     # What is the 1/2 size of this sprite, so we can figure out how far
                     # away to spawn the grenade
-                    size = max(self.player_sprite.width, self.player_sprite.height) / 2
+                    size = max(self.player_sprite_1.width, self.player_sprite_1.height) / 2
 
                     # Use angle to to spawn bullet away from player in proper direction
                     grenade.center_x += size * math.cos(angle)
@@ -1827,7 +1827,7 @@ class GameView(arcade.View):
                 randfire(odds =250, x=4, y=1, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "candyRed.png")
             
             elif type(enemy) == type(SilverSlime()):    
-                aimingfire(rate = 120, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "spinner.png")
+                aimingfire(rate = 120, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "spinner.png")
 
             elif type(enemy) == type(Thunderer()):
                 randfire(odds =500, x=1, y=-3, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet1.png")
@@ -1835,7 +1835,7 @@ class GameView(arcade.View):
                 randfire(odds =500, x=-2, y=-6, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet2.png")
                 randfire(odds =500, x=2, y=-6, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet2.png")
                 randfire(odds =500, x=0, y=-10, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "sparky.png")
-                aimingfire(rate = 360, bullet_speed=6, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "thunderbullet.png")
+                aimingfire(rate = 360, bullet_speed=6, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "thunderbullet.png")
 
             elif type(enemy) == type(SuperThunderer()):
                 randfire(odds =100, x=1, y=-3, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet1.png")
@@ -1843,20 +1843,20 @@ class GameView(arcade.View):
                 randfire(odds =100, x=-2, y=-6, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet2.png")
                 randfire(odds =100, x=2, y=-6, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "thunderbullet2.png")
                 randfire(odds =100, x=0, y=-10, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "sparky.png")
-                aimingfire(rate = 30, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "thunderbullet.png")
+                aimingfire(rate = 30, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "thunderbullet.png")
 
             elif type(enemy) == type(Chomper()):    
-                aimingfire(rate = 100, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "chomper_bullet.png")
+                aimingfire(rate = 100, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "chomper_bullet.png")
 
             elif type(enemy) == type(PrimarySlime()):   
-                aimingfire(rate = 360, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupBiggest.png")
-                aimingfire(rate = 120, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupBig.png")
-                aimingfire(rate = 60, bullet_speed=4, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupSmall.png")
+                aimingfire(rate = 360, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupBiggest.png")
+                aimingfire(rate = 120, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupBig.png")
+                aimingfire(rate = 60, bullet_speed=4, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupSmall.png")
 
             elif type(enemy) == type(SecondarySlime()):   
-                aimingfire(rate = 120, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupBiggest2.png")
-                aimingfire(rate = 60, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupBig2.png")
-                aimingfire(rate = 30, bullet_speed=4, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "mupSmall2.png")
+                aimingfire(rate = 120, bullet_speed=12, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupBiggest2.png")
+                aimingfire(rate = 60, bullet_speed=8, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupBig2.png")
+                aimingfire(rate = 30, bullet_speed=4, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "mupSmall2.png")
 
             elif type(enemy) == type(DiamondShooter()):
                 randfire(odds =1000, x=-10, y=2, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "gemYellow.png")
@@ -1874,7 +1874,7 @@ class GameView(arcade.View):
                 randfire(odds =1000, x=0, y=10, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "gemYellow.png")
 
             elif type(enemy) == type(BlueSlimeBoss()):    
-                aimingfire(rate = 60, bullet_speed=6, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "spinner.png")
+                aimingfire(rate = 60, bullet_speed=6, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "spinner.png")
                 randfire(odds =1000, x=-10, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
                 randfire(odds =1000, x=-10, y=1, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
                 randfire(odds =1000, x=-10, y=2, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
@@ -1895,24 +1895,24 @@ class GameView(arcade.View):
                 randfire(odds =1000, x=10, y=-4, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
     
             elif type(enemy) == type(RobotEnemy()):    
-                aimingfire(rate = 60, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserRed02.png")
-                aimingfire(rate = 20, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserBlue01.png")
+                aimingfire(rate = 60, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserRed02.png")
+                aimingfire(rate = 20, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserBlue01.png")
                
             elif type(enemy) == type(RolyPolyBot()):    
-                aimingfire(rate = 40, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserGreenHorizontal.png")
-                aimingfire(rate = 30, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserRed02.png")
-                aimingfire(rate = 20, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserBlue01.png")
+                aimingfire(rate = 40, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserGreenHorizontal.png")
+                aimingfire(rate = 30, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserRed02.png")
+                aimingfire(rate = 20, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserBlue01.png")
  
             elif type(enemy) == type(MasterVerse()): 
-                aimingfire(rate = 60, bullet_speed=20, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserPurple.png") 
-                aimingfire(rate = 30, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserGreenHorizontal.png")
-                aimingfire(rate = 20, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserRed02.png")
-                aimingfire(rate = 10, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserBlue01.png")
+                aimingfire(rate = 60, bullet_speed=20, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserPurple.png") 
+                aimingfire(rate = 30, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserGreenHorizontal.png")
+                aimingfire(rate = 20, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserRed02.png")
+                aimingfire(rate = 10, bullet_speed=2, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserBlue01.png")
 
             elif type(enemy) == type(FlufflePop()): 
-                aimingfire(rate = 20, bullet_speed=20, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserPurple.png") 
-                aimingfire(rate = 10, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserGreenHorizontal.png")
-                aimingfire(rate = 5, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite.center_x, aim_y=self.player_sprite.center_y, weapon = "laserRed02.png")
+                aimingfire(rate = 20, bullet_speed=20, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserPurple.png") 
+                aimingfire(rate = 10, bullet_speed=10, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserGreenHorizontal.png")
+                aimingfire(rate = 5, bullet_speed=5, origin_x=enemy.center_x, origin_y=enemy.center_y, aim_x=self.player_sprite_1.center_x, aim_y=self.player_sprite_1.center_y, weapon = "laserRed02.png")
                 randfire(odds =1000, x=-10, y=0, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
                 randfire(odds =1000, x=-10, y=1, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
                 randfire(odds =1000, x=-10, y=2, angle=0, origin_x = enemy.center_x, origin_top = enemy.top, weapon = "spinner.png")
@@ -1935,22 +1935,22 @@ class GameView(arcade.View):
                  
         # See if we hit any coins
         coin_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.coin_list
+            self.player_sprite_1, self.coin_list
         )
 
         # See if we hit any hearts
         heart_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.heart_list
+            self.player_sprite_1, self.heart_list
         )
 
         # See if we hit any power ups
         power_up_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.power_ups_list
+            self.player_sprite_1, self.power_ups_list
         )
 
         # See if we hit any enemies
         enemy_collision_list = arcade.check_for_collision_with_lists(
-            self.player_sprite,
+            self.player_sprite_1,
             [
                 self.scene[LAYER_NAME_ENEMIES],
                 self.scene[LAYER_NAME_ENEMY_BULLETS],
@@ -2051,21 +2051,21 @@ class GameView(arcade.View):
                     self.invincibility_timer = 0 
 
         # Did the player fall off the map?
-        if self.player_sprite.center_y < -100:
+        if self.player_sprite_1.center_y < -100:
             arcade.play_sound(self.game_over)
             self.lives -=1
             self.setup()
 
         # Did the player touch something they should not?
         if arcade.check_for_collision_with_list(
-            self.player_sprite, self.dont_touch_list
+            self.player_sprite_1, self.dont_touch_list
         ):
             arcade.play_sound(self.game_over)
             self.lives -=1
             self.setup()
 
         # See if the user got to the end of the level
-        if self.player_sprite.center_x >= self.end_of_map:
+        if self.player_sprite_1.center_x >= self.end_of_map:
             # Advance to the next level
             self.level += 1
 
