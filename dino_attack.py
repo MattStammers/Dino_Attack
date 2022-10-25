@@ -1920,6 +1920,123 @@ class GameView(arcade.View):
                     # Reset
                     self.mouse_pressed1 = False
 
+        # Add mouse shooting - P2
+        if self.mouse_pressed2:
+            if self.grenade_booster2 >=1:
+                self.grenade_booster2 -=1
+                for x in range(0,self.p2_level_up):
+                    grenade = GrenadeSprite((5+self.p2_level_up), self.p2_level_up, arcade.color.PURPLE_HEART)
+                    self.grenade_list.append(grenade)
+
+                    # Position the grenade at the player's current location
+                    start_x = self.player_sprite_2.center_x
+                    start_y = self.player_sprite_2.center_y
+                    grenade.position = self.player_sprite_2.position
+
+                    # Get from the mouse the destination location for the grenade
+                    # IMPORTANT! If you have a scrolling screen, you will also need
+                    # to add in self.view_bottom and self.view_left.
+                    dest_x = self.x
+                    dest_y = self.y
+
+                    # Do math to calculate how to get the grenade to the destination.
+                    # Calculation the angle in radians between the start points
+                    # and end points. This is the angle the grenade will travel.
+                    x_diff = dest_x - start_x
+                    y_diff = dest_y - start_y
+                    angle = math.atan2(y_diff, x_diff)
+
+                    # What is the 1/2 size of this sprite, so we can figure out how far
+                    # away to spawn the grenade
+                    size = max(self.player_sprite_2.width, self.player_sprite_2.height) / 2
+
+                    # Use angle to to spawn bullet away from player in proper direction
+                    grenade.center_x += size * math.cos(angle)
+                    grenade.center_y += size * math.sin(angle)
+
+                    # Set angle of bullet
+                    grenade.angle = math.degrees(angle)
+
+                    # Gravity to use for the bullet
+                    # If we don't use custom gravity, bullet drops too fast, or we have
+                    # to make it go too fast.
+                    # Force is in relation to bullet's angle.
+                    grenade_gravity = (0, -BULLET_GRAVITY)
+
+                    # Add the sprite. This needs to be done AFTER setting the fields above.
+                    self.physics_engine.add_sprite(grenade,
+                                                mass=BULLET_MASS,
+                                                damping=1.0,
+                                                friction=0.6,
+                                                collision_type="grenade",
+                                                gravity=grenade_gravity,
+                                                elasticity=0.9)
+
+                    # Add force to bullet
+                    force = (BULLET_MOVE_FORCE*self.p2_level_up, 0)
+                    self.physics_engine.apply_force(grenade, force)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+
+                    # Reset
+                    self.mouse_pressed2 = True
+
+            elif self.p2_level_up>=1:
+                for x in range(0,self.p2_level_up):
+                    grenade = GrenadeSprite((5+self.p2_level_up), self.p2_level_up, arcade.color.PURPLE_HEART)
+                    self.grenade_list.append(grenade)
+
+                    # Position the grenade at the player's current location
+                    start_x = self.player_sprite_2.center_x
+                    start_y = self.player_sprite_2.center_y
+                    grenade.position = self.player_sprite_2.position
+
+                    # Get from the mouse the destination location for the grenade
+                    # IMPORTANT! If you have a scrolling screen, you will also need
+                    # to add in self.view_bottom and self.view_left.
+                    dest_x = self.x
+                    dest_y = self.y
+
+                    # Do math to calculate how to get the grenade to the destination.
+                    # Calculation the angle in radians between the start points
+                    # and end points. This is the angle the grenade will travel.
+                    x_diff = dest_x - start_x
+                    y_diff = dest_y - start_y
+                    angle = math.atan2(y_diff, x_diff)
+
+                    # What is the 1/2 size of this sprite, so we can figure out how far
+                    # away to spawn the grenade
+                    size = max(self.player_sprite_2.width, self.player_sprite_2.height) / 2
+
+                    # Use angle to to spawn bullet away from player in proper direction
+                    grenade.center_x += size * math.cos(angle)
+                    grenade.center_y += size * math.sin(angle)
+
+                    # Set angle of bullet
+                    grenade.angle = math.degrees(angle)
+
+                    # Gravity to use for the bullet
+                    # If we don't use custom gravity, bullet drops too fast, or we have
+                    # to make it go too fast.
+                    # Force is in relation to bullet's angle.
+                    grenade_gravity = (0, -BULLET_GRAVITY)
+
+                    # Add the sprite. This needs to be done AFTER setting the fields above.
+                    self.physics_engine.add_sprite(grenade,
+                                                mass=BULLET_MASS,
+                                                damping=1.0,
+                                                friction=0.6,
+                                                collision_type="grenade",
+                                                gravity=grenade_gravity,
+                                                elasticity=0.9)
+
+                    # Add force to bullet
+                    force = (BULLET_MOVE_FORCE*self.p2_level_up, 0)
+                    self.physics_engine.apply_force(grenade, force)
+                    self.scene.add_sprite(LAYER_NAME_PLAYER_GRENADES, grenade)
+
+                    # Reset
+                    self.mouse_pressed2 = False
+
         # Check lives. If it is zero, flip to the game over view.
         if self.p1_lives == 0:
             view = GameOverView()
