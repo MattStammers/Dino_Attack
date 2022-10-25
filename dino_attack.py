@@ -1471,6 +1471,40 @@ class GameView(arcade.View):
                                             #  if self.p1_score >= 10000000:
                                             #    # Advance to the next level
                                             #    self.p1_level_up = 10
+        
+        # Calculate Spiny's level
+        if self.p2_score > 100:
+            # Advance to the next level
+            self.p2_level_up = 1
+            if self.p2_score >= 500:
+                # Advance to the next level
+                self.p2_level_up = 2
+                if self.p2_score >= 1250:
+                    # Advance to the next level
+                    self.p2_level_up = 3
+                    if self.p2_score >= 4000:
+                        # Advance to the next level
+                        self.p2_level_up = 4
+                        if self.p2_score >= 10000:
+                            # Advance to the next level
+                            self.p2_level_up = 5
+                            if self.p2_score >= 25000:
+                            # Advance to the next level
+                                self.p2_level_up = 6
+                                if self.p2_score >= 100000:
+                                    # Advance to the next level
+                                    self.p2_level_up = 7
+                                    if self.p2_score >= 250000:
+                                        # Advance to the next level
+                                        self.p2_level_up = 8
+                                        if self.p2_score >= 1000000:
+                                            # Advance to the next level
+                                            self.p2_level_up = 9
+                                            # level 10 to be reserved - needs debugging
+                                            #  if self.p1_score >= 10000000:
+                                            #    # Advance to the next level
+                                            #    self.p1_level_up = 10
+
 
         # Calculate if Player on ground
         is_on_ground1 = self.physics_engine.is_on_ground(self.player_sprite_1)
