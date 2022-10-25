@@ -215,6 +215,21 @@ class PlayerSprite(arcade.Sprite):
                 self.cur_texture = 0
             self.texture = self.climbing_textures[self.cur_texture]
             return
+        
+        if self.is_on_ladder and not is_on_ground2:
+            # Have we moved far enough to change the texture?
+            if abs(self.y_odometer) > DISTANCE_TO_CHANGE_TEXTURE:
+
+                # Reset the odometer
+                self.y_odometer = 0
+
+                # Advance the walking animation
+                self.cur_texture += 1
+
+            if self.cur_texture > 1:
+                self.cur_texture = 0
+            self.texture = self.climbing_textures[self.cur_texture]
+            return
 
         # Jumping animation
         if not is_on_ground1:
@@ -224,10 +239,20 @@ class PlayerSprite(arcade.Sprite):
             elif dy < -DEAD_ZONE:
                 self.texture = self.fall_texture_pair[self.character_face_direction1]
                 return
+        if not is_on_ground2:
+            if dy > DEAD_ZONE:
+                self.texture = self.jump_texture_pair[self.character_face_direction2]
+                return
+            elif dy < -DEAD_ZONE:
+                self.texture = self.fall_texture_pair[self.character_face_direction2]
+                return
 
         # Idle animation
         if abs(dx) <= DEAD_ZONE:
             self.texture = self.idle_texture_pair[self.character_face_direction1]
+            return
+        if abs(dx) <= DEAD_ZONE:
+            self.texture = self.idle_texture_pair[self.character_face_direction2]
             return
 
         # Have we moved far enough to change the texture?
@@ -1488,6 +1513,47 @@ class GameView(arcade.View):
         else:
             # Player's feet are not moving. Therefore up the friction so we stop.
             self.physics_engine.set_friction(self.player_sprite_1, 1.0)
+
+        # Move items in the physics engine
+        self.physics_engine.step()
+
+        # Update player forces based on keys pressed
+        if self.left_pressed2 and not self.right_pressed2:
+            # Create a force to the left. Apply it.
+            if is_on_ground2 or self.player_sprite_2.is_on_ladder:
+                force = (-PLAYER_MOVE_FORCE_ON_GROUND, 0)
+            else:
+                force = (-PLAYER_MOVE_FORCE_IN_AIR, 0)
+            self.physics_engine.apply_force(self.player_sprite_2, force)
+            # Set friction to zero for the player while moving
+            self.physics_engine.set_friction(self.player_sprite_2, 0)
+        elif self.right_pressed2 and not self.left_pressed2:
+            # Create a force to the right. Apply it.
+            if is_on_ground2 or self.player_sprite_2.is_on_ladder:
+                force = (PLAYER_MOVE_FORCE_ON_GROUND, 0)
+            else:
+                force = (PLAYER_MOVE_FORCE_IN_AIR, 0)
+            self.physics_engine.apply_force(self.player_sprite_2, force)
+            # Set friction to zero for the player while moving
+            self.physics_engine.set_friction(self.player_sprite_2, 0)
+        elif self.up_pressed2 and not self.down_pressed2:
+            # Create a force to the right. Apply it.
+            if self.player_sprite_2.is_on_ladder:
+                force = (0, PLAYER_MOVE_FORCE_ON_GROUND)
+                self.physics_engine.apply_force(self.player_sprite_2, force)
+                # Set friction to zero for the player while moving
+                self.physics_engine.set_friction(self.player_sprite_2, 0)
+        elif self.down_pressed2 and not self.up_pressed2:
+            # Create a force to the right. Apply it.
+            if self.player_sprite_2.is_on_ladder:
+                force = (0, -PLAYER_MOVE_FORCE_ON_GROUND)
+                self.physics_engine.apply_force(self.player_sprite_2, force)
+                # Set friction to zero for the player while moving
+                self.physics_engine.set_friction(self.player_sprite_2, 0)
+
+        else:
+            # Player's feet are not moving. Therefore up the friction so we stop.
+            self.physics_engine.set_friction(self.player_sprite_2, 1.0)
 
         # Move items in the physics engine
         self.physics_engine.step()
