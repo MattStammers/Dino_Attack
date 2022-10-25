@@ -23,7 +23,8 @@ DEFAULT_FONT_SIZE = 20
 
 # Key Game Layer Variables - central source of control
 LAYER_NAME_PLATFORMS = "Platforms"
-LAYER_NAME_PLAYER = "Player"
+LAYER_NAME_PLAYER_1 = "Player1"
+LAYER_NAME_PLAYER_2 = "Player2"
 LAYER_NAME_BACKGROUND = "Background"
 LAYER_NAME_FOREGROUND = "Foreground"
 LAYER_NAME_COINS = "Coins"
@@ -693,6 +694,7 @@ class GameView(arcade.View):
 
         # Player sprite
         self.player_sprite_1: Optional[PlayerSprite] = None
+        self.player_sprite_2: Optional[PlayerSprite] = None
 
         # Track the current state of what key is pressed
         self.left_pressed: bool = False
