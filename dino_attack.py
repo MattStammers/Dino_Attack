@@ -884,13 +884,20 @@ class GameView(arcade.View):
 
         # Create player sprite
         self.player_sprite_1 = PlayerSprite(self.ladder_list, hit_box_algorithm="Detailed")
+        self.player_sprite_2 = PlayerSprite(self.ladder_list, hit_box_algorithm="Detailed")
 
-        # Set player start location
+
+        # Set player1 start location
         self.player_sprite_1.center_x = SPRITE_SIZE * start_grid_x + SPRITE_SIZE / 2
         self.player_sprite_1.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2
         
+        # Set player2 start location
+        self.player_sprite_2.center_x = SPRITE_SIZE * start_grid_x + SPRITE_SIZE / 2
+        self.player_sprite_2.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2 # To make the sprite visible
+        
         # Add to player sprite list
         self.player_list.append(self.player_sprite_1)
+        self.player_list.append(self.player_sprite_2)
 
         # Make sure that forground is added afterwards
         self.foreground_list = self.tile_map.sprite_lists[LAYER_NAME_FOREGROUND]
