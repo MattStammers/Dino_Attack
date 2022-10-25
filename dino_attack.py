@@ -893,7 +893,7 @@ class GameView(arcade.View):
         
         # Set player2 start location
         self.player_sprite_2.center_x = SPRITE_SIZE * start_grid_x + SPRITE_SIZE / 2
-        self.player_sprite_2.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2 # To make the sprite visible
+        self.player_sprite_2.center_y = SPRITE_SIZE * start_grid_y + SPRITE_SIZE / 2
         
         # Add to player sprite list
         self.player_list.append(self.player_sprite_1)
@@ -1072,6 +1072,14 @@ class GameView(arcade.View):
         # in top-down games that friction moving along the 'floor' is controlled
         # by damping.
         self.physics_engine.add_sprite(self.player_sprite_1,
+                                       friction=PLAYER_FRICTION,
+                                       mass=PLAYER_MASS,
+                                       moment=arcade.PymunkPhysicsEngine.MOMENT_INF,
+                                       collision_type="player",
+                                       max_horizontal_velocity=PLAYER_MAX_HORIZONTAL_SPEED,
+                                       max_vertical_velocity=PLAYER_MAX_VERTICAL_SPEED)
+        
+        self.physics_engine.add_sprite(self.player_sprite_2,
                                        friction=PLAYER_FRICTION,
                                        mass=PLAYER_MASS,
                                        moment=arcade.PymunkPhysicsEngine.MOMENT_INF,
