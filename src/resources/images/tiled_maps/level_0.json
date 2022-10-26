@@ -381,6 +381,39 @@
                  "width":0,
                  "x":9984,
                  "y":3584
+                }, 
+                {
+                 "height":0,
+                 "id":30,
+                 "name":"Carnie",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"boundary_left",
+                         "type":"int",
+                         "value":400
+                        }, 
+                        {
+                         "name":"boundary_right",
+                         "type":"int",
+                         "value":850
+                        }, 
+                        {
+                         "name":"change_x",
+                         "type":"int",
+                         "value":5
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"carnie"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":6016,
+                 "y":3712
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -737,7 +770,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":29,
+ "nextobjectid":31,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -2512,8 +2512,7 @@ class GameView(arcade.View):
                 print("Warning, collected a heart without a Lives property.")
             else:
                 lives = int(heart.properties["Lives"])
-                self.p1_lives += lives,
-                self.p2_lives += lives
+                self.p1_lives += lives
             # Remove the coin
             heart.remove_from_sprite_lists()
             # Play a sound
