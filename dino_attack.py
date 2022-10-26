@@ -2443,22 +2443,22 @@ class GameView(arcade.View):
                  
         # See if we hit any coins
         coin_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite_2, self.coin_list
+            self.player_sprite_1, self.coin_list
         )
 
         # See if we hit any hearts
         heart_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite_2, self.heart_list
+            self.player_sprite_1, self.heart_list
         )
 
         # See if we hit any power ups
         power_up_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite_2, self.power_ups_list
+            self.player_sprite_1, self.power_ups_list
         )
 
         # See if we hit any enemies
         enemy_collision_list = arcade.check_for_collision_with_lists(
-                self.player_sprite_2,
+                self.player_sprite_1,
             [
                 self.scene[LAYER_NAME_ENEMIES],
                 self.scene[LAYER_NAME_ENEMY_BULLETS],
