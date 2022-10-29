@@ -2169,8 +2169,10 @@ class GameView(arcade.View):
                             collision.remove_from_sprite_lists()
                             if type(enemy) == type(GreenWorm()):
                                 self.p1_score += int(getattr(GreenWorm(),"health"))
+                                self.p2_score += int(getattr(GreenWorm(),"health"))
                             elif type(enemy) == type(Carnie()):
                                 self.p1_score += int(getattr(Carnie(),"health"))
+                                self.p2_score += int(getattr(Carnie(),"health"))
                             elif type(enemy) == type(BlueSlime()):
                                 self.p1_score += int(getattr(BlueSlime(),"health"))
                             elif type(enemy) == type(GreenSlime()):
@@ -2192,7 +2194,7 @@ class GameView(arcade.View):
                             elif type(enemy) == type(PrimarySlime()):
                                 self.p1_score += int(getattr(PrimarySlime(),"health"))
                             elif type(enemy) == type(SecondarySlime()):
-                                 self.p1_score += int(getattr(SecondarySlime(),"health"))
+                                self.p1_score += int(getattr(SecondarySlime(),"health"))
                             elif type(enemy) == type(Thunderer()):
                                 self.p1_score += int(getattr(Thunderer(),"health"))
                             elif type(enemy) == type(SuperThunderer()):
@@ -2499,7 +2501,7 @@ class GameView(arcade.View):
                 print("Warning, collected a coin without a Points property.")
             else:
                 points = int(coin.properties["Points"])
-                # self.p1_score += points,
+                self.p1_score += points
                 self.p2_score += points
             # Remove the coin
             coin.remove_from_sprite_lists()
