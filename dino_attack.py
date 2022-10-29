@@ -2175,73 +2175,53 @@ class GameView(arcade.View):
                                 self.p2_score += int(getattr(Carnie(),"health"))
                             elif type(enemy) == type(BlueSlime()):
                                 self.p1_score += int(getattr(BlueSlime(),"health"))
-                            elif type(enemy) == type(GreenSlime()):
-                                self.p1_score += int(getattr(GreenSlime(),"health"))
-                            elif type(enemy) == type(PurpleSlime()):
-                                self.p1_score += int(getattr(PurpleSlime(),"health"))
-                            elif type(enemy) == type(SilverSlime()):
-                                self.p1_score += int(getattr(SilverSlime(),"health"))
-                            elif type(enemy) == type(LavaSnake()):
-                                self.p1_score += int(getattr(LavaSnake(),"health"))
-                            elif type(enemy) == type(BlueSlimeBoss()):
-                                self.p1_score += int(getattr(BlueSlimeBoss(),"health"))
-                            elif type(enemy) == type(RobotEnemy()):
-                                self.p1_score += int(getattr(RobotEnemy(),"health"))
-                            elif type(enemy) == type(Chomper()):
-                                self.p1_score += int(getattr(Chomper(),"health"))
-                            elif type(enemy) == type(DiamondShooter()):
-                                self.p1_score += int(getattr(DiamondShooter(),"health"))
-                            elif type(enemy) == type(PrimarySlime()):
-                                self.p1_score += int(getattr(PrimarySlime(),"health"))
-                            elif type(enemy) == type(SecondarySlime()):
-                                self.p1_score += int(getattr(SecondarySlime(),"health"))
-                            elif type(enemy) == type(Thunderer()):
-                                self.p1_score += int(getattr(Thunderer(),"health"))
-                            elif type(enemy) == type(SuperThunderer()):
-                                self.p1_score += int(getattr(SuperThunderer(),"health"))
-                            elif type(enemy) == type(RolyPolyBot()):
-                                self.p1_score += int(getattr(RolyPolyBot(),"health"))
-                            elif type(enemy) == type(MasterVerse()):
-                                self.p1_score += int(getattr(MasterVerse(),"health"))
-                            elif type(enemy) == type(FlufflePop()):
-                                self.p1_score += int(getattr(FlufflePop(),"health"))
-                            elif type(enemy) == type(GreenWorm()):
-                                self.p2_score += int(getattr(GreenWorm(),"health"))
-                            elif type(enemy) == type(Carnie()):
-                                self.p2_score += int(getattr(Carnie(),"health"))
-                            elif type(enemy) == type(BlueSlime()):
                                 self.p2_score += int(getattr(BlueSlime(),"health"))
                             elif type(enemy) == type(GreenSlime()):
+                                self.p1_score += int(getattr(GreenSlime(),"health"))
                                 self.p2_score += int(getattr(GreenSlime(),"health"))
                             elif type(enemy) == type(PurpleSlime()):
+                                self.p1_score += int(getattr(PurpleSlime(),"health"))
                                 self.p2_score += int(getattr(PurpleSlime(),"health"))
                             elif type(enemy) == type(SilverSlime()):
+                                self.p1_score += int(getattr(SilverSlime(),"health"))
                                 self.p2_score += int(getattr(SilverSlime(),"health"))
                             elif type(enemy) == type(LavaSnake()):
+                                self.p1_score += int(getattr(LavaSnake(),"health"))
                                 self.p2_score += int(getattr(LavaSnake(),"health"))
                             elif type(enemy) == type(BlueSlimeBoss()):
+                                self.p1_score += int(getattr(BlueSlimeBoss(),"health"))
                                 self.p2_score += int(getattr(BlueSlimeBoss(),"health"))
                             elif type(enemy) == type(RobotEnemy()):
+                                self.p1_score += int(getattr(RobotEnemy(),"health"))
                                 self.p2_score += int(getattr(RobotEnemy(),"health"))
                             elif type(enemy) == type(Chomper()):
+                                self.p1_score += int(getattr(Chomper(),"health"))
                                 self.p2_score += int(getattr(Chomper(),"health"))
                             elif type(enemy) == type(DiamondShooter()):
+                                self.p1_score += int(getattr(DiamondShooter(),"health"))
                                 self.p2_score += int(getattr(DiamondShooter(),"health"))
                             elif type(enemy) == type(PrimarySlime()):
+                                self.p1_score += int(getattr(PrimarySlime(),"health"))
                                 self.p2_score += int(getattr(PrimarySlime(),"health"))
                             elif type(enemy) == type(SecondarySlime()):
-                                 self.p2_score += int(getattr(SecondarySlime(),"health"))
+                                self.p1_score += int(getattr(SecondarySlime(),"health"))
+                                self.p2_score += int(getattr(SecondarySlime(),"health"))
                             elif type(enemy) == type(Thunderer()):
+                                self.p1_score += int(getattr(Thunderer(),"health"))
                                 self.p2_score += int(getattr(Thunderer(),"health"))
                             elif type(enemy) == type(SuperThunderer()):
+                                self.p1_score += int(getattr(SuperThunderer(),"health"))
                                 self.p2_score += int(getattr(SuperThunderer(),"health"))
                             elif type(enemy) == type(RolyPolyBot()):
+                                self.p1_score += int(getattr(RolyPolyBot(),"health"))
                                 self.p2_score += int(getattr(RolyPolyBot(),"health"))
                             elif type(enemy) == type(MasterVerse()):
+                                self.p1_score += int(getattr(MasterVerse(),"health"))
                                 self.p2_score += int(getattr(MasterVerse(),"health"))
                             elif type(enemy) == type(FlufflePop()):
+                                self.p1_score += int(getattr(FlufflePop(),"health"))
                                 self.p2_score += int(getattr(FlufflePop(),"health"))
-
+                            
                         # Hit sound
                         arcade.play_sound(self.hit_sound)
 
