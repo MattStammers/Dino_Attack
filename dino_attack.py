@@ -2424,36 +2424,48 @@ class GameView(arcade.View):
   
                  
         # See if we hit any coins
-        coin_hit_list = arcade.check_for_collision_with_list(
+        coin_hit_list1 = arcade.check_for_collision_with_list(
             self.player_sprite_1, self.coin_list
         )
+        coin_hit_list2 = arcade.check_for_collision_with_list(
+            self.player_sprite_2, self.coin_list
+        )
+        coin_hit_list = coin_hit_list1 + coin_hit_list2
 
         # See if we hit any hearts
-        heart_hit_list = arcade.check_for_collision_with_list(
+        heart_hit_list1 = arcade.check_for_collision_with_list(
             self.player_sprite_1, self.heart_list
         )
+        heart_hit_list2 = arcade.check_for_collision_with_list(
+            self.player_sprite_2, self.heart_list
+        )
+        heart_hit_list = heart_hit_list1 + heart_hit_list2
 
         # See if we hit any power ups
-        power_up_hit_list = arcade.check_for_collision_with_list(
+        power_up_hit_list1 = arcade.check_for_collision_with_list(
             self.player_sprite_1, self.power_ups_list
         )
+        power_up_hit_list2 = arcade.check_for_collision_with_list(
+            self.player_sprite_2, self.power_ups_list
+        )
+        power_up_hit_list = power_up_hit_list1 + power_up_hit_list2
 
         # See if we hit any enemies
-        enemy_collision_list = arcade.check_for_collision_with_lists(
+        enemy_collision_list1 = arcade.check_for_collision_with_lists(
                 self.player_sprite_1,
             [
                 self.scene[LAYER_NAME_ENEMIES],
                 self.scene[LAYER_NAME_ENEMY_BULLETS],
             ],
         )
-        # # See if we hit any enemies
-        # enemy_collision_list = arcade.check_for_collision_with_lists(
-        #         self.player_sprite_2,
-        #     [
-        #         self.scene[LAYER_NAME_ENEMIES],
-        #         self.scene[LAYER_NAME_ENEMY_BULLETS],
-        #     ],
-        # )
+        enemy_collision_list2 = arcade.check_for_collision_with_lists(
+                self.player_sprite_2,
+            [
+                self.scene[LAYER_NAME_ENEMIES],
+                self.scene[LAYER_NAME_ENEMY_BULLETS],
+            ],
+        )
+        enemy_collision_list = enemy_collision_list1 + enemy_collision_list2
 
         # Loop Through Enemy Bullets and check for collisions
 
